@@ -1,13 +1,21 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { StMainCon, StSideCon } from "../styles/Page";
-import { MdHomeFilled } from "react-icons/md";
-import { BiSearch, BiMoviePlay } from "react-icons/bi";
-import { IoPaperPlaneOutline } from "react-icons/io5";
-import { HiOutlineHeart } from "react-icons/hi";
+import { BiMoviePlay, BiSolidMoviePlay } from "react-icons/bi";
+import { IoIosSearch } from "react-icons/io";
+import {
+  IoPaperPlaneOutline,
+  IoPaperPlane,
+  IoSearch,
+  IoMenuOutline,
+  IoMenu,
+} from "react-icons/io5";
+import { HiOutlineHeart, HiHeart } from "react-icons/hi";
 import { FiPlusSquare } from "react-icons/fi";
-import { AiOutlineCompass, AiOutlineMenu } from "react-icons/ai";
+import { AiOutlineCompass, AiOutlineMenu, AiFillCompass } from "react-icons/ai";
+import { GoHome, GoHomeFill } from "react-icons/go";
 import instagram from "../img/instagram.png";
+import { useState } from "react";
 
 const Logo = styled.img`
   margin: 20px 10px;
@@ -31,7 +39,6 @@ const SidebarContainer = styled.div`
 const SidebarContent = styled.div`
   display: flex;
   flex-direction: column;
-
   margin-top: 1px;
 `;
 
@@ -39,12 +46,10 @@ const TabButton = styled.button`
   display: flex;
   align-items: center;
   padding: 10px 10px;
-
   background-color: transparent;
   border: none;
   font-size: 23px;
   margin-bottom: 18px;
-
   &:hover {
     background-color: #ececec;
     border-radius: 8px;
@@ -57,46 +62,99 @@ const TabText = styled.span`
   margin-left: 20px;
 `;
 
-const BaseLayout = () => {
+const buttonsData = [
+  {
+    id: "home",
+    defaultIcon: <GoHomeFill />,
+    activeIcon: <GoHome />,
+    text: "홈",
+    path: "/main",
+  },
+  {
+    id: "search",
+    defaultIcon: <IoSearch />,
+    activeIcon: <IoIosSearch />,
+    text: "검색",
+  },
+  {
+    id: "explore",
+    defaultIcon: <AiFillCompass />,
+    activeIcon: <AiOutlineCompass />,
+    text: "탐색",
+    path: "/explore",
+  },
+  {
+    id: "reels",
+    defaultIcon: <BiSolidMoviePlay />,
+    activeIcon: <BiMoviePlay />,
+    text: "릴스",
+    path: "/reels",
+  },
+  {
+    id: "messages",
+    defaultIcon: <IoPaperPlane />,
+    activeIcon: <IoPaperPlaneOutline />,
+    text: "메세지",
+    path: "/messages",
+  },
+  {
+    id: "notifications",
+    defaultIcon: <HiHeart />,
+    activeIcon: <HiOutlineHeart />,
+    text: "알림",
+  },
+  {
+    id: "create",
+    defaultIcon: <FiPlusSquare />,
+    activeIcon: <FiPlusSquare />,
+    text: "만들기",
+  },
+  {
+    id: "more",
+    defaultIcon: <IoMenu />,
+    activeIcon: <IoMenuOutline />,
+    text: "더보기",
+  },
+];
+
+const Button = ({ data, isActive, onClick }) => {
   const navigate = useNavigate();
+  const Icon = isActive ? data.defaultIcon : data.activeIcon;
+
+  const handleButtonClick = () => {
+    if (data.path) {
+      navigate(data.path);
+    }
+    onClick(data.id);
+  };
+  return (
+    <TabButton onClick={handleButtonClick}>
+      {Icon}
+      <TabText>{data.text}</TabText>
+    </TabButton>
+  );
+};
+
+const BaseLayout = () => {
+  const [activeButton, setActiveButton] = useState("home");
+
+  const handleButtonClick = (buttonId) => {
+    setActiveButton(buttonId);
+  };
   return (
     <StMainCon>
       <StSideCon>
         <SidebarContainer>
-          <Logo src={instagram} onClick={() => navigate("/main")}></Logo>
+          <Logo src={instagram} onClick={() => handleButtonClick("home")} />
           <SidebarContent>
-            <TabButton onClick={() => navigate("/main")}>
-              <MdHomeFilled />
-              <TabText>홈</TabText>
-            </TabButton>
-            <TabButton onClick={() => navigate("/main")}>
-              <BiSearch />
-              <TabText>검색</TabText>
-            </TabButton>
-            <TabButton onClick={() => navigate("/main")}>
-              <AiOutlineCompass />
-              <TabText>탐색</TabText>
-            </TabButton>
-            <TabButton onClick={() => navigate("/main")}>
-              <BiMoviePlay />
-              <TabText>릴스</TabText>
-            </TabButton>
-            <TabButton onClick={() => navigate("/main")}>
-              <IoPaperPlaneOutline />
-              <TabText>메세지</TabText>
-            </TabButton>
-            <TabButton onClick={() => navigate("/main")}>
-              <HiOutlineHeart />
-              <TabText>알림</TabText>
-            </TabButton>
-            <TabButton onClick={() => navigate("/main")}>
-              <FiPlusSquare />
-              <TabText>만들기</TabText>
-            </TabButton>
-            <TabButton onClick={() => navigate("/main")}>
-              <AiOutlineMenu />
-              <TabText>더보기</TabText>
-            </TabButton>
+            {buttonsData.map((button) => (
+              <Button
+                key={button.id}
+                data={button}
+                isActive={activeButton === button.id}
+                onClick={handleButtonClick}
+              />
+            ))}
           </SidebarContent>
         </SidebarContainer>
       </StSideCon>
