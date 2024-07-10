@@ -16,6 +16,10 @@ const LoginPage = () => {
     navigate("/main");
   };
 
+  const gotoPassword = () => {
+    navigate("/password");
+  };
+
   return (
     <Wrapper className="login-container">
       <h1 className="logo">Instagram</h1>
@@ -34,8 +38,17 @@ const LoginPage = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <StButton onClick={handleSubmit}>로그인</StButton>
-      <StLinkCon href="/forgot-password" className="forgot-password">
-        비밀번호를 잊으셨나요?
+      <StLinkCon className="forgot-password">
+        <div
+          onClick={gotoPassword}
+          style={{
+            color: "#00376B",
+            cursor: "pointer",
+          }}
+        >
+          비밀번호를 잊으셨나요?
+        </div>
+        {/* <Link to="/password">비밀번호를 잊으셨나요?</Link> */}
       </StLinkCon>
       <StLinkCon className="signup-box">
         계정이 없으신가요? <Link to="/signup">가입하기</Link>
