@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { StInput, StButton, StLinkCon, Wrapper } from "../styles/ChangeStyle";
+import {
+  StInput,
+  StButton,
+  StLinkCon,
+  Wrapper,
+  StImg,
+} from "../styles/ChangeStyle";
+import instagram from "../img/instagram.png";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -22,7 +29,7 @@ const LoginPage = () => {
 
   return (
     <Wrapper className="login-container">
-      <h1 className="logo">Instagram</h1>
+      <StImg className="logo" src={instagram} />
       <StInput
         type="username"
         name="username"

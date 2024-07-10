@@ -35,11 +35,20 @@ export const StLinkCon = styled.div`
   width: 100%;
   font-size: 0.9rem;
   text-align: center;
-  margin-top: 5%;
+  margin-top: 7%;
 
   a {
     color: ${Colors.buttonBlue};
     font-weight: bold;
+  }
+`;
+
+export const StImg = styled.img`
+  margin: 20px 10px;
+  margin-bottom: 40px;
+  width: 190px;
+  &:hover {
+    cursor: pointer;
   }
 `;
 
