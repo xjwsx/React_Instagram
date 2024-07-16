@@ -1,8 +1,4 @@
 const MessagesPage = () => {
-  return (
-    <div>
-      <h1>MessagesPage</h1>
-    </div>
-  );
+  return <div>MessagesPage</div>;
 };
 export default MessagesPage;

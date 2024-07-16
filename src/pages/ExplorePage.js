@@ -1,12 +1,4 @@
 const ExplorePage = () => {
-  return (
-    <div
-      style={{
-        color: "black",
-      }}
-    >
-      ExplorePage
-    </div>
-  );
+  return <div>ExplorePage</div>;
 };
 export default ExplorePage;
