@@ -3,16 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { StMainCon, StMiddleCon, StSideCon } from "../styles/Page";
 import { BiMoviePlay, BiSolidMoviePlay } from "react-icons/bi";
 import { IoIosSearch } from "react-icons/io";
-import {
-  IoPaperPlaneOutline,
-  IoPaperPlane,
-  IoSearch,
-  IoMenuOutline,
-  IoMenu,
-} from "react-icons/io5";
+import { IoSearch, IoMenuOutline, IoMenu } from "react-icons/io5";
+import { PiPaperPlaneTilt, PiPaperPlaneTiltFill } from "react-icons/pi";
 import { HiOutlineHeart, HiHeart } from "react-icons/hi";
 import { FiPlusSquare } from "react-icons/fi";
-import { AiOutlineCompass, AiOutlineMenu, AiFillCompass } from "react-icons/ai";
+import { AiOutlineCompass, AiFillCompass } from "react-icons/ai";
 import { GoHome, GoHomeFill } from "react-icons/go";
 import instagram from "../img/instagram.png";
 import { useState } from "react";
@@ -47,8 +42,8 @@ const buttonsData = [
   },
   {
     id: "messages",
-    defaultIcon: <IoPaperPlane />,
-    activeIcon: <IoPaperPlaneOutline />,
+    defaultIcon: <PiPaperPlaneTiltFill />,
+    activeIcon: <PiPaperPlaneTilt />,
     text: "메세지",
     path: "/messages",
   },
