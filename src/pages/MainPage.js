@@ -46,12 +46,9 @@ const MainPage = () => {
           </StoryList>
           <FeedList className="FeedList">
             <Feed className="Feed"></Feed>
-            {/* {combineData?.map((item) => {
-              return <Feed key={item.id} photo={item} user={item.user} />;
-            })} */}
           </FeedList>
         </FeedMain>
-        <Recommand>reommand</Recommand>
+        <Recommand className="Recommand">reommand</Recommand>
       </MainPageLayout>
     </MainPageAll>
   );

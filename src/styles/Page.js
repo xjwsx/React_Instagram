@@ -103,11 +103,27 @@ export const FeedContents = styled.div`
     padding: 3px 0;
     cursor: pointer;
   }
+`;
 
-  p {
-    color: #777;
-    //padding: 2px 0;
+export const StyledInput = styled.input`
+  width: 98%;
+  color: #777;
+  border: none;
+  outline: none;
+  font-size: 14px;
+`;
+
+export const PostButton = styled.button`
+  width: 55px;
+  font-size: 14px;
+  font-weight: bold;
+  color: blue;
+  border: none;
+  background-color: transparent;
+
+  &:hover {
     cursor: pointer;
+    color: black;
   }
 `;
 
