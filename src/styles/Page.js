@@ -170,24 +170,9 @@ export const UserStory = styled.div`
 `;
 
 export const StoryList = styled.div`
+  display: flex;
+  align-items: center;
   margin-top: 16px;
   margin-bottom: 24px;
   padding: 8px 0;
-`;
-
-export const Story = styled.div`
-  align-items: stretch;
-  display: flex;
-  flex-direction: column;
-  height: 85px;
-  outline: none;
-  overflow-y: hidden;
-  position: relative;
-`;
-
-export const Recommand = styled.div`
-  width: 100%;
-  max-width: 320px;
-  padding-left: 64px;
-  height: 100vh;
 `;

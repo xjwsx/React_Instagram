@@ -49,7 +49,7 @@ const Feed = ({ photo, user }) => {
       <FeedTitle className="FeedTitle">
         <UserInfo className="UserInfo">
           <UserStory className="UserStory" />
-          <UserId>jxwsx</UserId>
+          <UserId>pieceofxeace</UserId>
         </UserInfo>
         <TfiMoreAlt
           style={{
@@ -94,7 +94,6 @@ const Feed = ({ photo, user }) => {
               style={{ fontSize: "26px", cursor: "pointer" }}
               onClick={changeModal}
             />
-            {modal && <ChatModal onClose={changeModal} />}
           </span>
           <span>
             <PiPaperPlaneTilt style={{ fontSize: "26px", cursor: "pointer" }} />
@@ -136,7 +135,7 @@ const Feed = ({ photo, user }) => {
             cursor: "pointer",
           }}
         >
-          댓글 {commentsCount}개 모두 보기
+          <span onClick={changeModal}>댓글 {commentsCount}개 모두 보기</span>
         </div>
         <div
           style={{
@@ -161,6 +160,7 @@ const Feed = ({ photo, user }) => {
           />
         </div>
       </FeedContents>
+      {modal && <ChatModal onClose={changeModal} />}
     </FeedLayout>
   );
 };

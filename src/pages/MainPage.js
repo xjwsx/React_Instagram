@@ -3,12 +3,12 @@ import {
   FeedMain,
   MainPageAll,
   MainPageLayout,
-  Recommand,
-  Story,
   StoryList,
 } from "../styles/Page";
 import Feed from "../components/Feed";
 import { useEffect, useState } from "react";
+import Recommand from "../components/Recommand";
+import Story from "../components/Story";
 
 const MainPage = () => {
   const [photos, setPhotos] = useState([]);
@@ -42,13 +42,13 @@ const MainPage = () => {
       <MainPageLayout className="MainPageLayout">
         <FeedMain className="FeedMain">
           <StoryList className="StoryList">
-            <Story className="Story">Main</Story>
+            <Story></Story>
           </StoryList>
           <FeedList className="FeedList">
             <Feed className="Feed"></Feed>
           </FeedList>
         </FeedMain>
-        <Recommand className="Recommand">reommand</Recommand>
+        <Recommand></Recommand>
       </MainPageLayout>
     </MainPageAll>
   );
