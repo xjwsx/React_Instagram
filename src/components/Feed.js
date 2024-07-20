@@ -23,7 +23,7 @@ import { CgSmile } from "react-icons/cg";
 import { useState } from "react";
 import ChatModal from "./ChatModal";
 
-const Feed = ({ photo, user }) => {
+const Feed = ({ item }) => {
   const [likeCount, setLikeCount] = useState(0);
   const [commentsCount, setCommentsCount] = useState(0);
   const [comment, setComment] = useState("");
@@ -49,7 +49,7 @@ const Feed = ({ photo, user }) => {
       <FeedTitle className="FeedTitle">
         <UserInfo className="UserInfo">
           <UserStory className="UserStory" />
-          <UserId>pieceofxeace</UserId>
+          <UserId>{item.username}</UserId>
         </UserInfo>
         <TfiMoreAlt
           style={{
@@ -58,7 +58,12 @@ const Feed = ({ photo, user }) => {
           }}
         />
       </FeedTitle>
-      <FeedPhoto className="FeedPhoto"></FeedPhoto>
+      <FeedPhoto
+        className="FeedPhoto"
+        style={{
+          backgroundImage: `url(${item.url})`,
+        }}
+      ></FeedPhoto>
       <FeedButtons className="FeedButtons">
         <div
           style={{
@@ -126,7 +131,7 @@ const Feed = ({ photo, user }) => {
           <b>좋아요 {likeCount}개</b>
         </span>
         <span>
-          <b>nickname</b> constents
+          <b>{item.username}</b> constents
         </span>
         <div
           style={{
@@ -160,7 +165,7 @@ const Feed = ({ photo, user }) => {
           />
         </div>
       </FeedContents>
-      {modal && <ChatModal onClose={changeModal} />}
+      {modal && <ChatModal onClose={changeModal} item={item} />}
     </FeedLayout>
   );
 };

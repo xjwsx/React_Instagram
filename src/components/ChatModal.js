@@ -1,11 +1,16 @@
 import styled from "styled-components";
 import { TfiMoreAlt } from "react-icons/tfi";
 
-const ChatModal = ({ onClose }) => {
+const ChatModal = ({ onClose, item }) => {
   return (
     <Outside className="Outside">
       <ModalPosition className="ModalPosition">
-        <ModalPhoto className="ModalPhoto" />
+        <ModalPhoto
+          className="ModalPhoto"
+          style={{
+            backgroundImage: `url(${item.url})`,
+          }}
+        />
         <CommentSection className="CommentScetion">
           <Comment className="Comment">
             <div
@@ -25,7 +30,7 @@ const ChatModal = ({ onClose }) => {
                 }}
               >
                 <CommentStory />
-                asdfasd
+                {item.username}
               </div>
               <TfiMoreAlt
                 style={{
@@ -103,7 +108,7 @@ const Comment = styled.div`
   border-left: 1px solid #ccc;
 `;
 
-export const CommentStory = styled.div`
+const CommentStory = styled.div`
   width: 32px;
   height: 32px;
   background: linear-gradient(to right, #ffb300, #ff1459, #d400c1);

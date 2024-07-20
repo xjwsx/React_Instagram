@@ -66,6 +66,8 @@ export const FeedPhoto = styled.div`
   margin: 0 auto;
   background-color: black;
   border-radius: 5px;
+  background-position: center;
+  background-size: cover;
 `;
 
 export const FeedTitle = styled.div`
