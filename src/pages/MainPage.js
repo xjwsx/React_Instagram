@@ -6,7 +6,7 @@ import {
   StoryList,
 } from "../styles/Page";
 import Feed from "../components/Feed";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Recommand from "../components/Recommand";
 import Story from "../components/Story";
 
@@ -22,10 +22,14 @@ import Story from "../components/Story";
 
 const MainPage = () => {
   const [photos, setPhotos] = useState([]);
+  const [page, setPage] = useState(1);
+  const loader = useRef(null);
 
   const getPhotos = async () => {
     const photoJson = await (
-      await fetch(`https://jsonplaceholder.typicode.com/photos`)
+      await fetch(
+        `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=5`
+      )
     ).json();
 
     const newPhotos = photoJson.slice(0, 20);
@@ -40,12 +44,32 @@ const MainPage = () => {
       // }
       return { ...photo, ...userJson[i] };
     });
-    setPhotos(result);
+    setPhotos((prevPhotos) => [...prevPhotos, ...result]);
+    setPage((prePage) => prePage + 1);
   };
-
   useEffect(() => {
-    getPhotos();
-  }, []);
+    const options = {
+      root: null,
+      rootMargin: "20px",
+      threshold: 1.0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        getPhotos();
+      }
+    }, options);
+
+    if (loader.current) {
+      observer.observe(loader.current);
+    }
+
+    return () => {
+      if (loader.current) {
+        observer.unobserve(loader.current);
+      }
+    };
+  }, [loader.current]);
 
   return (
     <MainPageAll className="MainPageAll">
@@ -59,6 +83,7 @@ const MainPage = () => {
               return <Feed item={data}></Feed>;
             })}
           </FeedList>
+          <div ref={loader} />
         </FeedMain>
         <Recommand></Recommand>
       </MainPageLayout>
