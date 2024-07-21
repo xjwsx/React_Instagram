@@ -45,13 +45,14 @@ const MainPage = () => {
       return { ...photo, ...userJson[i] };
     });
     setPhotos((prevPhotos) => [...prevPhotos, ...result]);
-    setPage((prePage) => prePage + 1);
+    setPage((prevPage) => prevPage + 1);
   };
+
   useEffect(() => {
     const options = {
       root: null,
-      rootMargin: "20px",
-      threshold: 1.0,
+      rootMargin: "1800px",
+      threshold: 0,
     };
 
     const observer = new IntersectionObserver((entries) => {
