@@ -1,12 +1,6 @@
-import {
-  FeedList,
-  FeedMain,
-  MainPageAll,
-  MainPageLayout,
-  StoryList,
-} from "../styles/Page";
-import Feed from "../components/Feed";
+import styled from "styled-components";
 import { useEffect, useRef, useState } from "react";
+import Feed from "../components/Feed";
 import Recommand from "../components/Recommand";
 import Story from "../components/Story";
 
@@ -92,3 +86,38 @@ const MainPage = () => {
   );
 };
 export default MainPage;
+
+const MainPageAll = styled.div`
+  width: 100%;
+  max-width: 1020px;
+  height: auto;
+  margin: 0 auto;
+`;
+
+const MainPageLayout = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+`;
+
+const FeedMain = styled.div`
+  width: 100%;
+  max-width: 630px;
+`;
+
+const FeedList = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 470px;
+  margin: 0 auto;
+`;
+
+const StoryList = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+  margin-bottom: 24px;
+  padding: 8px 0;
+`;

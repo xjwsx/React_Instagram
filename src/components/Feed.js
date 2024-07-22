@@ -1,16 +1,8 @@
-import {
-  FeedButtons,
-  FeedContents,
-  FeedLayout,
-  FeedPhoto,
-  FeedTitle,
-  PostButton,
-  StyledInput,
-  UserId,
-  UserInfo,
-  UserStory,
-} from "../styles/Page";
+import styled from "styled-components";
+import { useEffect, useState } from "react";
 import { TfiMoreAlt } from "react-icons/tfi";
+import { useUser } from "../hooks/useUser";
+import ChatModal from "./ChatModal";
 import {
   HiOutlineHeart,
   HiHeart,
@@ -20,12 +12,11 @@ import {
 import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
 import { PiPaperPlaneTilt } from "react-icons/pi";
 import { CgSmile } from "react-icons/cg";
-import { useState } from "react";
-import ChatModal from "./ChatModal";
 
 const Feed = ({ item }) => {
+  const { user } = useUser();
   const [likeCount, setLikeCount] = useState(0);
-  const [commentsCount, setCommentsCount] = useState(0);
+  const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const [isBookMarkActive, setIsBookMarkActive] = useState(false);
   const [isLikeActive, setIsLikeActive] = useState(false);
@@ -40,9 +31,34 @@ const Feed = ({ item }) => {
     if (isLikeActive ? setLikeCount(0) : setLikeCount(1));
   };
 
+  const handleAddComment = () => {
+    if (comment.trim()) {
+      const newComment = {
+        username: user.username,
+        content: comment,
+        timestamp: new Date().toISOString(),
+        feedid: item.id,
+      };
+      const updateComments = [...comments, newComment];
+      setComments(updateComments);
+      localStorage.setItem(
+        `${item.username}-${item.id}`,
+        JSON.stringify(updateComments)
+      );
+      setComment("");
+    }
+  };
+
   const changeModal = () => {
     setModal(!modal);
   };
+
+  useEffect(() => {
+    const storedComments = localStorage.getItem(`${item.username}-${item.id}`);
+    if (storedComments) {
+      setComments(JSON.parse(storedComments));
+    }
+  }, [item.id]);
 
   return (
     <FeedLayout>
@@ -131,7 +147,7 @@ const Feed = ({ item }) => {
           <b>좋아요 {likeCount}개</b>
         </span>
         <span>
-          <b>{item.username}</b> constents
+          <b>{item.username}</b> {item.title}
         </span>
         <div
           style={{
@@ -140,7 +156,7 @@ const Feed = ({ item }) => {
             cursor: "pointer",
           }}
         >
-          <span onClick={changeModal}>댓글 {commentsCount}개 모두 보기</span>
+          <span onClick={changeModal}>댓글 {comments.length}개 모두 보기</span>
         </div>
         <div
           style={{
@@ -154,9 +170,10 @@ const Feed = ({ item }) => {
           <StyledInput
             type="text"
             placeholder="댓글 달기..."
+            value={comment}
             onChange={(e) => setComment(e.target.value)}
           />
-          {comment && <PostButton>게시</PostButton>}
+          {comment && <PostButton onClick={handleAddComment}>게시</PostButton>}
           <CgSmile
             size="16"
             style={{
@@ -171,3 +188,124 @@ const Feed = ({ item }) => {
 };
 
 export default Feed;
+
+const FeedLayout = styled.div`
+  padding-bottom: 12px;
+  padding-left: 4px;
+  max-width: 630px;
+`;
+
+const FeedPhoto = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  width: 470px;
+  height: 470px;
+  margin: 0 auto;
+  background-color: black;
+  border-radius: 5px;
+  background-position: center;
+  background-size: cover;
+`;
+
+const FeedTitle = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-bottom: 12px;
+`;
+
+const FeedButtons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 4px 0px;
+
+  span {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
+const FeedContents = styled.div`
+  margin-bottom: 12px;
+  border-bottom: 1px solid #ccc;
+  font-size: 14px;
+  line-height: 19px;
+
+  span {
+    color: #333;
+    display: block;
+    padding: 3px 0;
+    cursor: pointer;
+  }
+`;
+
+const StyledInput = styled.input`
+  width: 98%;
+  color: #777;
+  border: none;
+  outline: none;
+  font-size: 14px;
+`;
+
+const PostButton = styled.button`
+  width: 55px;
+  font-size: 14px;
+  font-weight: bold;
+  color: blue;
+  border: none;
+  background-color: transparent;
+
+  &:hover {
+    cursor: pointer;
+    color: black;
+  }
+`;
+
+const UserInfo = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  a {
+    padding: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #444;
+  }
+`;
+
+const UserId = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  align-self: auto;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const UserStory = styled.div`
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(to right, #ffb300, #ff1459, #d400c1);
+  border-radius: 50%;
+  margin-right: 12px;
+  padding: 2px;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border: 2.5px solid #fff;
+    border-radius: 50%;
+  }
+`;

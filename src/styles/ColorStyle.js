@@ -1,5 +1,3 @@
-import { styled } from "styled-components";
-
 export const Colors = {
   buttonActiveBlue: "#0083da",
   buttonBlue: "#4cb4f8",

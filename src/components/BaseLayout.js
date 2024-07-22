@@ -1,6 +1,6 @@
 import styled from "styled-components";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { StMainCon, StMiddleCon, StSideCon } from "../styles/Page";
 import { BiMoviePlay, BiSolidMoviePlay } from "react-icons/bi";
 import { IoIosSearch } from "react-icons/io";
 import { IoSearch, IoMenuOutline, IoMenu } from "react-icons/io5";
@@ -10,7 +10,6 @@ import { FiPlusSquare } from "react-icons/fi";
 import { AiOutlineCompass, AiFillCompass } from "react-icons/ai";
 import { GoHome, GoHomeFill } from "react-icons/go";
 import instagram from "../img/instagram.png";
-import { useState } from "react";
 
 const buttonsData = [
   {
@@ -92,8 +91,8 @@ const BaseLayout = ({ children }) => {
     setActiveButton(buttonId);
   };
   return (
-    <StMainCon className="stmaincon">
-      <StSideCon className="stsidecon">
+    <BaseLayoutMain className="BaseLayoutMain">
+      <Side className="Side">
         <SidebarContainer>
           <Logo src={instagram} onClick={() => handleButtonClick("home")} />
           <SidebarLayout>
@@ -107,13 +106,34 @@ const BaseLayout = ({ children }) => {
             ))}
           </SidebarLayout>
         </SidebarContainer>
-      </StSideCon>
-      <StMiddleCon>{children}</StMiddleCon>
-    </StMainCon>
+      </Side>
+      <MiddleMain>{children}</MiddleMain>
+    </BaseLayoutMain>
   );
 };
 
 export default BaseLayout;
+
+const BaseLayoutMain = styled.div`
+  display: flex;
+  width: 100%;
+`;
+
+const Side = styled.div`
+  width: 100%;
+  max-width: 235px;
+  height: 100vh;
+  position: sticky;
+  left: 0;
+  top: 0;
+`;
+
+const MiddleMain = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`;
 
 const Logo = styled.img`
   margin: 30px 10px;
