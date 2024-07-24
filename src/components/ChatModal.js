@@ -90,7 +90,6 @@ const ModalPhoto = styled.div`
   width: 470px;
   height: 470px;
   background-color: black;
-  //background: url(${(props) => props.imageURL}) center center;
   background-size: cover;
 `;
 

@@ -12,6 +12,7 @@ import {
 import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
 import { PiPaperPlaneTilt } from "react-icons/pi";
 import { CgSmile } from "react-icons/cg";
+import EmojiPicker from "emoji-picker-react";
 
 const Feed = ({ item }) => {
   const { user } = useUser();
@@ -21,6 +22,7 @@ const Feed = ({ item }) => {
   const [isBookMarkActive, setIsBookMarkActive] = useState(false);
   const [isLikeActive, setIsLikeActive] = useState(false);
   const [modal, setModal] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const handleBookMarkButton = () => {
     setIsBookMarkActive(!isBookMarkActive);
@@ -49,6 +51,16 @@ const Feed = ({ item }) => {
     }
   };
 
+  const onEmojiClick = (emojiObject) => {
+    setComment(comment + emojiObject.emoji);
+    setShowEmojiPicker(false);
+    console.log(emojiObject);
+  };
+
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker(!showEmojiPicker);
+  };
+
   const changeModal = () => {
     setModal(!modal);
   };
@@ -75,7 +87,7 @@ const Feed = ({ item }) => {
         />
       </FeedTitle>
       <FeedPhoto
-        className="FeedPhoto"
+        className="gingham"
         style={{
           backgroundImage: `url(${item.url})`,
         }}
@@ -174,14 +186,31 @@ const Feed = ({ item }) => {
             onChange={(e) => setComment(e.target.value)}
           />
           {comment && <PostButton onClick={handleAddComment}>게시</PostButton>}
-          <CgSmile
-            size="16"
+          <div
             style={{
-              cursor: "pointer",
+              position: "relative",
             }}
-          />
+          >
+            <CgSmile
+              size="16"
+              style={{ cursor: "pointer" }}
+              onClick={toggleEmojiPicker}
+            />
+            {showEmojiPicker && (
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "50px",
+                  left: "20px",
+                }}
+              >
+                <EmojiPicker onEmojiClick={onEmojiClick} />
+              </div>
+            )}
+          </div>
         </div>
       </FeedContents>
+
       {modal && <ChatModal onClose={changeModal} item={item} />}
     </FeedLayout>
   );
