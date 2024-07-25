@@ -87,7 +87,7 @@ const Feed = ({ item }) => {
         />
       </FeedTitle>
       <FeedPhoto
-        className="gingham"
+        className="cc"
         style={{
           backgroundImage: `url(${item.url})`,
         }}

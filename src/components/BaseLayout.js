@@ -10,6 +10,7 @@ import { FiPlusSquare } from "react-icons/fi";
 import { AiOutlineCompass, AiFillCompass } from "react-icons/ai";
 import { GoHome, GoHomeFill } from "react-icons/go";
 import instagram from "../img/instagram.png";
+import CreateModal from "./CreateModal";
 
 const buttonsData = [
   {
@@ -67,20 +68,33 @@ const buttonsData = [
 ];
 
 const Button = ({ data, isActive, onClick }) => {
+  const [modal, setModal] = useState(false);
   const navigate = useNavigate();
-  const Icon = isActive ? data.defaultIcon : data.activeIcon;
+
+  const changeModal = () => {
+    setModal(!modal);
+  };
 
   const handleButtonClick = () => {
     if (data.path) {
       navigate(data.path);
+    } else if (data.id === "create") {
+      setModal(true);
+    } else {
+      onClick(data.id);
     }
-    onClick(data.id);
   };
+
   return (
-    <Buttons onClick={handleButtonClick}>
-      {Icon}
-      <ButtonText>{data.text}</ButtonText>
-    </Buttons>
+    <>
+      <Buttons onClick={handleButtonClick}>
+        {isActive ? data.defaultIcon : data.activeIcon}
+        <ButtonText>{data.text}</ButtonText>
+      </Buttons>
+      {data.id === "create" && modal && (
+        <CreateModal onClose={() => setModal(false)} />
+      )}
+    </>
   );
 };
 
@@ -126,6 +140,7 @@ const Side = styled.div`
   position: sticky;
   left: 0;
   top: 0;
+  z-index: 200;
 `;
 
 const MiddleMain = styled.div`
