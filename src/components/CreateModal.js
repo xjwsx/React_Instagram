@@ -1,15 +1,20 @@
 import styled from "styled-components";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaPhotoVideo } from "react-icons/fa";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { CgSmile } from "react-icons/cg";
 import profile from "../img/profile.png";
 import { filters } from "../utils/filters";
+import Picker from "emoji-picker-react";
 
 const CreateModal = ({ onClose }) => {
   const refs = useRef();
   const [imgFile, setImgFile] = useState("");
   const [step, setStep] = useState(1);
   const [filterData, setFilterData] = useState();
+  const [username, setUsername] = useState("");
+  const [comment, setComment] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const clickInput = () => {
     refs.current.click();
@@ -23,6 +28,15 @@ const CreateModal = ({ onClose }) => {
       setImgFile(reader.result);
       setStep(step + 1);
     };
+  };
+
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker(!showEmojiPicker);
+  };
+
+  const onEmojiClick = (emojiObject) => {
+    setComment(comment + emojiObject.emoji);
+    setShowEmojiPicker(false);
   };
 
   const onClickImgButton = (filter) => {
@@ -49,7 +63,11 @@ const CreateModal = ({ onClose }) => {
       case 2:
         return (
           <>
-            <div>
+            <div
+              style={{
+                marginTop: "5px",
+              }}
+            >
               <FaArrowLeftLong
                 size="22px"
                 onClick={() => setStep(step - 1)}
@@ -65,22 +83,17 @@ const CreateModal = ({ onClose }) => {
             >
               필터
             </div>
-            <div
-              onClick={() => setStep(step + 1)}
-              style={{
-                color: "blue",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
-              다음
-            </div>
+            <NextButton onClick={() => setStep(step + 1)}>다음</NextButton>
           </>
         );
       case 3:
         return (
           <>
-            <div>
+            <div
+              style={{
+                marginTop: "5px",
+              }}
+            >
               <FaArrowLeftLong
                 size="22px"
                 onClick={() => setStep(step - 1)}
@@ -96,16 +109,7 @@ const CreateModal = ({ onClose }) => {
             >
               새 게시물 만들기
             </div>
-            <div
-              onClick={() => setStep(step + 1)}
-              style={{
-                color: "blue",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
-              공유하기
-            </div>
+            <NextButton onClick={() => setStep(step + 1)}>공유하기</NextButton>
           </>
         );
     }
@@ -143,19 +147,7 @@ const CreateModal = ({ onClose }) => {
               >
                 사진과 동영상을 여기에 끌어다 놓으세요.
               </div>
-              <button
-                onClick={clickInput}
-                style={{
-                  backgroundColor: "#0095F6",
-                  border: 0,
-                  marginTop: "20px",
-                  padding: "8px 15px",
-                  borderRadius: "5px",
-                  color: "white",
-                }}
-              >
-                컴퓨터에서 선택
-              </button>
+              <EventButton onClick={clickInput}>컴퓨터에서 선택</EventButton>
               <input
                 type="file"
                 ref={refs}
@@ -188,13 +180,17 @@ const CreateModal = ({ onClose }) => {
                 display: "flex",
                 alignItems: "center",
                 flexDirection: "column",
+                borderLeft: "1px solid #ccc",
               }}
             >
               <div
                 style={{
+                  width: "100%",
                   height: 40,
                   display: "flex",
                   alignItems: "center",
+                  justifyContent: "center",
+                  borderBottom: "1px solid #ccc",
                 }}
               >
                 필터
@@ -220,7 +216,7 @@ const CreateModal = ({ onClose }) => {
                           maxWidth: 100,
                           textAlign: "center",
                           padding: "3px",
-                          color: filter === filterData ? "blue" : "black",
+                          color: filter === filterData ? "#0095F6" : "black",
                         }}
                       >
                         <img
@@ -251,64 +247,106 @@ const CreateModal = ({ onClose }) => {
               style={{
                 flex: 1,
                 maxWidth: 600,
-                // height: "100%",
               }}
             ></img>
             <div
+              className="Layout"
               style={{
                 display: "flex",
                 alignItems: "center",
                 flexDirection: "column",
+                height: 541,
+                maxHeight: 541,
+                borderLeft: "1px solid #ccc",
               }}
             >
               <div
                 style={{
-                  height: 40,
+                  width: "100%",
                   display: "flex",
                   alignItems: "center",
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
                 }}
               >
-                필터
+                <img
+                  src={profile}
+                  style={{
+                    width: "28px",
+                    height: "28px",
+                    borderRadius: "50%",
+                    marginLeft: "12px",
+                    marginTop: "18px",
+                    marginBottom: "14px",
+                    marginRight: "10px",
+                  }}
+                ></img>
+                <div
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {username}
+                </div>
               </div>
               <div
                 style={{
-                  overflowY: "scroll",
-                  maxHeight: 500,
+                  display: "flex",
+                  flexWrap: "wrap",
+                  width: 320,
                 }}
               >
-                <div
+                <textarea
+                  placeholder="문구를 입력하세요...."
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
                   style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    width: 320,
+                    width: "100%",
+                    height: "168px",
+                    minHeight: "40px",
+                    color: "black",
+                    padding: "8px 16px",
+                    border: "none",
+                    outline: "none",
+                    resize: "none",
+                    overflowY: "scroll",
+                    fontSize: "14px",
+                    boxSizing: "border-box",
                   }}
-                >
-                  {filters.map((filter) => {
-                    return (
-                      <div
-                        style={{
-                          flex: "1 0 33%",
-                          maxWidth: 100,
-                          textAlign: "center",
-                          padding: "3px",
-                          color: filter === filterData ? "blue" : "black",
-                        }}
-                      >
-                        <img
-                          className={filter}
-                          src={profile}
-                          style={{
-                            width: "100%",
-                            maxWidth: 100,
-                            cursor: "pointer",
-                          }}
-                          onClick={() => onClickImgButton(filter)}
-                        ></img>
-                        {filter}
-                      </div>
-                    );
-                  })}
-                </div>
+                />
+              </div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  position: "relative",
+                  borderBottom: "1px solid #ccc",
+                }}
+              >
+                <CgSmile
+                  size="20"
+                  style={{ cursor: "pointer", margin: "12px 12px" }}
+                  onClick={toggleEmojiPicker}
+                />
+                {showEmojiPicker && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: "-290px",
+                    }}
+                  >
+                    <Picker
+                      reactionsDefaultOpen={true}
+                      height={300}
+                      width={300}
+                      onEmojiClick={onEmojiClick}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </Wrapper>
@@ -316,6 +354,11 @@ const CreateModal = ({ onClose }) => {
     }
     return;
   };
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    setUsername(storedUsername);
+  }, []);
 
   return (
     <Outside className="Outside">
@@ -351,6 +394,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   flex: 1;
+  overflow-y: scroll;
 `;
 
 const Outside = styled.div`
@@ -392,9 +436,6 @@ const ModalLayout = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
-  //align-items: center;
-  //justify-content: center;
-  //overflow-y: auto;
 `;
 
 const Comment = styled.div`
@@ -405,4 +446,27 @@ const Comment = styled.div`
   height: 44px;
   border-bottom: 1px solid #ccc;
   padding: 0 16px;
+`;
+
+const EventButton = styled.button`
+  background-color: #0095f6;
+  border: 0;
+  margin-top: 20px;
+  padding: 8px 15px;
+  border-radius: 5px;
+  color: white;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #0062a3;
+  }
+`;
+
+const NextButton = styled.div`
+  color: #0095f6;
+  font-weight: bold;
+  &:hover {
+    cursor: pointer;
+    color: #0062a3;
+  }
 `;

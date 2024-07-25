@@ -54,7 +54,6 @@ const Feed = ({ item }) => {
   const onEmojiClick = (emojiObject) => {
     setComment(comment + emojiObject.emoji);
     setShowEmojiPicker(false);
-    console.log(emojiObject);
   };
 
   const toggleEmojiPicker = () => {

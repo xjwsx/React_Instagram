@@ -92,7 +92,7 @@ const Button = ({ data, isActive, onClick }) => {
         <ButtonText>{data.text}</ButtonText>
       </Buttons>
       {data.id === "create" && modal && (
-        <CreateModal onClose={() => setModal(false)} />
+        <CreateModal onClose={() => changeModal()} />
       )}
     </>
   );

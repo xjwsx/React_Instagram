@@ -18,6 +18,7 @@ const LoginPage = () => {
       return;
     }
     setUser({ username });
+    localStorage.setItem("username", username);
     navigate("/main");
   };
 
