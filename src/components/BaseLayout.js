@@ -10,6 +10,7 @@ import { FiPlusSquare } from "react-icons/fi";
 import { AiOutlineCompass, AiFillCompass } from "react-icons/ai";
 import { GoHome, GoHomeFill } from "react-icons/go";
 import instagram from "../img/instagram.png";
+import profile from "../img/profile.png";
 import CreateModal from "./CreateModal";
 
 const buttonsData = [
@@ -60,6 +61,31 @@ const buttonsData = [
     text: "만들기",
   },
   {
+    id: "profile",
+    defaultIcon: (
+      <img
+        src={profile}
+        style={{
+          width: "23px",
+          height: "23px",
+          borderRadius: "50%",
+        }}
+      ></img>
+    ),
+    activeIcon: (
+      <img
+        src={profile}
+        style={{
+          width: "23px",
+          height: "23px",
+          borderRadius: "50%",
+        }}
+      ></img>
+    ),
+    text: "프로필",
+    path: "/profile",
+  },
+  {
     id: "more",
     defaultIcon: <IoMenu />,
     activeIcon: <IoMenuOutline />,
@@ -70,6 +96,7 @@ const buttonsData = [
 const Button = ({ data, isActive, onClick }) => {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
+  const Icon = isActive ? data.defaultIcon : data.activeIcon;
 
   const changeModal = () => {
     setModal(!modal);
@@ -80,15 +107,14 @@ const Button = ({ data, isActive, onClick }) => {
       navigate(data.path);
     } else if (data.id === "create") {
       setModal(true);
-    } else {
-      onClick(data.id);
     }
+    onClick(data.id);
   };
 
   return (
     <>
       <Buttons onClick={handleButtonClick}>
-        {isActive ? data.defaultIcon : data.activeIcon}
+        {Icon}
         <ButtonText>{data.text}</ButtonText>
       </Buttons>
       {data.id === "create" && modal && (

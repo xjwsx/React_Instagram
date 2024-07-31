@@ -9,12 +9,28 @@ import Picker from "emoji-picker-react";
 
 const CreateModal = ({ onClose }) => {
   const refs = useRef();
-  const [imgFile, setImgFile] = useState("");
   const [step, setStep] = useState(1);
   const [filterData, setFilterData] = useState();
+  const [imgFile, setImgFile] = useState("");
   const [username, setUsername] = useState("");
   const [comment, setComment] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [comments, setComments] = useState([]);
+
+  const shareFeed = () => {
+    const postData = {
+      username: localStorage.getItem("username"),
+      url: imgFile,
+      title: comment,
+      filter: filterData,
+      timestamp: new Date().toISOString(),
+    };
+
+    const updatePostData = [...comments, postData];
+    setComments(updatePostData);
+    localStorage.setItem("feedData", JSON.stringify(updatePostData));
+    onClose();
+  };
 
   const clickInput = () => {
     refs.current.click();
@@ -109,7 +125,7 @@ const CreateModal = ({ onClose }) => {
             >
               새 게시물 만들기
             </div>
-            <NextButton onClick={() => setStep(step + 1)}>공유하기</NextButton>
+            <NextButton onClick={shareFeed}>공유하기</NextButton>
           </>
         );
     }
@@ -358,7 +374,11 @@ const CreateModal = ({ onClose }) => {
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     setUsername(storedUsername);
-  }, []);
+    const storedPosts = localStorage.getItem(username);
+    if (storedPosts) {
+      setComments(JSON.parse(storedPosts));
+    }
+  }, [username]);
 
   return (
     <Outside className="Outside">

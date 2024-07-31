@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { useUser } from "../hooks/useUser";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import { Colors } from "../styles/ColorStyle";
 import instagram from "../img/instagram.png";
 
 const LoginPage = () => {
-  const { setUser } = useUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -17,7 +15,6 @@ const LoginPage = () => {
       alert("아이디와 패스워드를 모두 입력해주세요.");
       return;
     }
-    setUser({ username });
     localStorage.setItem("username", username);
     navigate("/main");
   };

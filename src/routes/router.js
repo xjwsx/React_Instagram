@@ -6,6 +6,7 @@ import ExplorePage from "../pages/ExplorePage";
 import ReelsPage from "../pages/ReelsPage";
 import MessagesPage from "../pages/MessagesPage";
 import BaseLayout from "../components/BaseLayout";
+import ProfilePage from "../pages/ProfilePage";
 
 const Router = () => {
   return (
@@ -41,6 +42,14 @@ const Router = () => {
           element={
             <BaseLayout>
               <MessagesPage />
+            </BaseLayout>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <BaseLayout>
+              <ProfilePage />
             </BaseLayout>
           }
         />

@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { TfiMoreAlt } from "react-icons/tfi";
-import { useUser } from "../hooks/useUser";
 import ChatModal from "./ChatModal";
 import {
   HiOutlineHeart,
@@ -15,7 +14,6 @@ import { CgSmile } from "react-icons/cg";
 import EmojiPicker from "emoji-picker-react";
 
 const Feed = ({ item }) => {
-  const { user } = useUser();
   const [likeCount, setLikeCount] = useState(0);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
@@ -36,7 +34,7 @@ const Feed = ({ item }) => {
   const handleAddComment = () => {
     if (comment.trim()) {
       const newComment = {
-        username: user.username,
+        username: localStorage.getItem("username"),
         content: comment,
         timestamp: new Date().toISOString(),
         feedid: item.id,
