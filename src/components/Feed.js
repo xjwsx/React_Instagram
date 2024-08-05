@@ -73,7 +73,9 @@ const Feed = ({ item }) => {
     <FeedLayout>
       <FeedTitle className="FeedTitle">
         <UserInfo className="UserInfo">
-          <UserStory className="UserStory" />
+          <UserStory className="UserStory">
+            <img src={item.url}></img>
+          </UserStory>
           <UserId>{item.username}</UserId>
         </UserInfo>
         <TfiMoreAlt
@@ -84,7 +86,7 @@ const Feed = ({ item }) => {
         />
       </FeedTitle>
       <FeedPhoto
-        className="cc"
+        className={item.filter}
         style={{
           backgroundImage: `url(${item.url})`,
         }}
@@ -320,7 +322,6 @@ const UserId = styled.div`
 const UserStory = styled.div`
   width: 42px;
   height: 42px;
-  background: linear-gradient(to right, #ffb300, #ff1459, #d400c1);
   border-radius: 50%;
   margin-right: 12px;
   padding: 2px;

@@ -6,14 +6,14 @@ import Story from "../components/Story";
 
 const MainPage = () => {
   const [photos, setPhotos] = useState([]);
-  const [feeds, setFeeds] = useState([]);
   const [page, setPage] = useState(1);
   const loader = useRef(null);
 
   const getPhotos = async () => {
     const photoJson = await (
       await fetch(
-        `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=5`
+        //`https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=5`
+        `https://api.thecatapi.com/v1/images/search?limit=10&page=${page}breed_ids=beng&api_key=live_6adQrDjpF5ekrkZQcE1CugaE281U0K6HeVQ8zJiw8ry0u7LT6lTilf2Z9DU9XeTF`
       )
     ).json();
 
@@ -32,7 +32,6 @@ const MainPage = () => {
 
     setPhotos((prevPhotos) => [...prevPhotos, ...result]);
     setPage((prevPage) => prevPage + 1);
-    console.log(photos);
   };
 
   useEffect(() => {
@@ -77,7 +76,9 @@ const MainPage = () => {
       <MainPageLayout className="MainPageLayout">
         <FeedMain className="FeedMain">
           <StoryList className="StoryList">
-            <Story />
+            {photos.slice(0, 8).map((data) => {
+              return <Story item={data}></Story>;
+            })}
           </StoryList>
           <FeedList className="FeedList">
             {photos.map((data) => {
@@ -86,7 +87,7 @@ const MainPage = () => {
           </FeedList>
           <div ref={loader} />
         </FeedMain>
-        <Recommand></Recommand>
+        <Recommand item={photos} />
       </MainPageLayout>
     </MainPageAll>
   );

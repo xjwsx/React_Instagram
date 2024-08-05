@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Story = () => {
+const Story = ({ item }) => {
   return (
     <StoryMain className="StoryMain">
       <StoryLayout className="StoryLayout">
@@ -13,8 +13,10 @@ const Story = () => {
             padding: "0 8px",
           }}
         >
-          <StoryProfile />
-          <div>nick</div>
+          <StoryProfile>
+            <img src={item.url}></img>
+          </StoryProfile>
+          <div>{item.username}</div>
         </div>
       </StoryLayout>
     </StoryMain>
@@ -42,7 +44,6 @@ export const StoryLayout = styled.div`
 export const StoryProfile = styled.div`
   width: 64px;
   height: 64px;
-  background: linear-gradient(to right, #ffb300, #ff1459, #d400c1);
   border-radius: 50%;
   padding: 2px;
   cursor: pointer;
