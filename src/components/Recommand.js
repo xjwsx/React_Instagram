@@ -1,11 +1,17 @@
 import styled from "styled-components";
 
-const Recommand = () => {
+const Recommand = ({ item }) => {
   return (
     <RecommandMain className="RecommandMain">
       <RecommandLayout className="RecommandLayout">
         <RecommandProfile className="RecommandProfile">
-          <RecommandStory className="RecommandStory"></RecommandStory>
+          <RecommandStory className="RecommandStory">
+            {item[0] && item[0].url ? (
+              <img src={item[0].url} alt="Profile" />
+            ) : (
+              <div>No Image</div>
+            )}
+          </RecommandStory>
           <RecommandUserName className="RecommandUserName">
             <span
               style={{
@@ -40,32 +46,28 @@ const Recommand = () => {
           <div
             style={{
               display: "flex",
-              flexDirection: "colum",
+              flexDirection: "column",
               width: "100%",
               padding: "16px 0",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              <RecommandUserProfile></RecommandUserProfile>
-              <RecommandUserId>yooniverse_s</RecommandUserId>
-              <span
-                style={{
-                  width: "15%",
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  color: "#0095f6",
-                }}
-              >
-                팔로우
-              </span>
-            </div>
+            {item.slice(2, 4).map((data) => (
+              <RecommandItemRow key={data.id}>
+                {data.url ? (
+                  <>
+                    <RecommandUserProfile>
+                      <img src={data.url} alt="Profile" />
+                    </RecommandUserProfile>
+                    <RecommandUserId>
+                      <div>{data.username || "Unknown User"}</div>
+                    </RecommandUserId>
+                    <FollowButton>팔로우</FollowButton>
+                  </>
+                ) : (
+                  <div>No Data</div>
+                )}
+              </RecommandItemRow>
+            ))}
           </div>
         </RecommandList>
       </RecommandLayout>
@@ -134,7 +136,6 @@ export const RecommandStory = styled.div`
   width: 42px;
   height: 42px;
   max-width: 100%;
-  background: black;
   border-radius: 50%;
   margin-right: 12px;
   padding: 2px;
@@ -157,7 +158,6 @@ export const RecommandUserName = styled.div`
 export const RecommandUserProfile = styled.div`
   width: 42px;
   height: 42px;
-  background: black;
   border-radius: 50%;
   margin-right: 12px;
   padding: 2px;
@@ -170,16 +170,31 @@ export const RecommandUserProfile = styled.div`
     object-fit: cover;
     border: 2.5px solid #fff;
     border-radius: 50%;
+    margin-bottom: 10px;
   }
 `;
 
 export const RecommandUserId = styled.div`
-  width: 63.5%;
+  flex: 1;
   display: flex;
   align-items: center;
-  flex-direction: row;
-  align-self: auto;
   &:hover {
     cursor: pointer;
   }
+`;
+
+export const RecommandItemRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+`;
+
+export const FollowButton = styled.div`
+  font-size: 14px;
+  font-weight: 600;
+  color: #0095f6;
+  cursor: pointer;
 `;

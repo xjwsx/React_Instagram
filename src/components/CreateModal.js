@@ -188,7 +188,6 @@ const CreateModal = ({ onClose }) => {
               style={{
                 flex: 1,
                 maxWidth: 600,
-                // height: "100%",
               }}
             ></img>
             <div
@@ -454,6 +453,7 @@ const ModalPosition = styled.div`
 const ModalLayout = styled.div`
   width: 100%;
   height: auto;
+  max-height: 578px;
   display: flex;
   flex-direction: column;
 `;

@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { TfiMoreAlt } from "react-icons/tfi";
 
 const ChatModal = ({ onClose, item }) => {
+  const storedComments = localStorage.getItem(`${item.username}-${item.id}`);
+  const comments = storedComments ? JSON.parse(storedComments) : [];
   return (
     <Outside className="Outside">
       <ModalPosition className="ModalPosition">
@@ -29,7 +31,9 @@ const ChatModal = ({ onClose, item }) => {
                   alignItems: "center",
                 }}
               >
-                <CommentStory />
+                <CommentStory>
+                  <img src={item.url} />
+                </CommentStory>
                 {item.username}
               </div>
               <TfiMoreAlt
@@ -42,6 +46,51 @@ const ChatModal = ({ onClose, item }) => {
               />
             </div>
           </Comment>
+          {comments.length > 0 ? (
+            comments.map((data, index) => (
+              <Comment key={index} className="Comment">
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "21px 4px 21px 16px",
+                  }}
+                >
+                  <CommentStory>
+                    <img src={item.url} alt="Comment User" />
+                  </CommentStory>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <strong>{data.username}</strong>
+                    <p
+                      style={{
+                        marginLeft: "10px",
+                      }}
+                    >
+                      {data.content}
+                    </p>
+                    <small
+                      style={{
+                        marginLeft: "15px",
+                        color: "#737373",
+                      }}
+                    >
+                      {new Date(data.timestamp).toLocaleString()}
+                    </small>
+                  </div>
+                </div>
+              </Comment>
+            ))
+          ) : (
+            <div style={{ padding: "21px", color: "#777" }}>
+              No comments yet.
+            </div>
+          )}
         </CommentSection>
       </ModalPosition>
       <div
@@ -110,7 +159,6 @@ const Comment = styled.div`
 const CommentStory = styled.div`
   width: 32px;
   height: 32px;
-  background: linear-gradient(to right, #ffb300, #ff1459, #d400c1);
   border-radius: 50%;
   margin-right: 12px;
   padding: 2px;
