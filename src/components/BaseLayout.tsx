@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BiMoviePlay, BiSolidMoviePlay } from "react-icons/bi";
 import { IoIosSearch } from "react-icons/io";
@@ -12,6 +12,24 @@ import { GoHome, GoHomeFill } from "react-icons/go";
 import instagram from "../img/instagram.png";
 import profile from "../img/profile.png";
 import CreateModal from "./CreateModal";
+
+interface ButtonData {
+  id: string;
+  defaultIcon: JSX.Element;
+  activeIcon: JSX.Element;
+  text: string;
+  path?: string;
+}
+
+interface ButtonProps {
+  data: ButtonData;
+  isActive: boolean;
+  onClick: (id: string) => void;
+}
+
+interface BaseLayoutProps {
+  children: ReactNode;
+}
 
 const buttonsData = [
   {
@@ -93,7 +111,7 @@ const buttonsData = [
   },
 ];
 
-const Button = ({ data, isActive, onClick }) => {
+const Button: React.FC<ButtonProps> = ({ data, isActive, onClick }) => {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const Icon = isActive ? data.defaultIcon : data.activeIcon;
@@ -124,10 +142,10 @@ const Button = ({ data, isActive, onClick }) => {
   );
 };
 
-const BaseLayout = ({ children }) => {
+const BaseLayout: React.FC<BaseLayoutProps> = ({ children }) => {
   const [activeButton, setActiveButton] = useState("home");
 
-  const handleButtonClick = (buttonId) => {
+  const handleButtonClick = (buttonId: string) => {
     setActiveButton(buttonId);
   };
   return (

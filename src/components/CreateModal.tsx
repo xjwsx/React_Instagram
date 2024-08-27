@@ -7,22 +7,34 @@ import profile from "../img/profile.png";
 import { filters } from "../utils/filters";
 import Picker from "emoji-picker-react";
 
-const CreateModal = ({ onClose }) => {
-  const refs = useRef();
-  const [step, setStep] = useState(1);
-  const [filterData, setFilterData] = useState();
-  const [imgFile, setImgFile] = useState("");
-  const [username, setUsername] = useState("");
-  const [comment, setComment] = useState("");
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [comments, setComments] = useState([]);
+interface CreateModalProps {
+  onClose: () => void;
+}
+
+interface PostData {
+  username: string;
+  url: string;
+  title: string;
+  filter: string;
+  timestamp: string;
+}
+
+const CreateModal: React.FC<CreateModalProps> = ({ onClose }) => {
+  const refs = useRef<HTMLInputElement>(null);
+  const [step, setStep] = useState<number>(1);
+  const [filterData, setFilterData] = useState<string | undefined>(undefined);
+  const [imgFile, setImgFile] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
+  const [comments, setComments] = useState<PostData[]>([]);
 
   const shareFeed = () => {
-    const postData = {
-      username: localStorage.getItem("username"),
+    const postData: PostData = {
+      username: localStorage.getItem("username") || "",
       url: imgFile,
       title: comment,
-      filter: filterData,
+      filter: filterData || "",
       timestamp: new Date().toISOString(),
     };
 
@@ -33,37 +45,39 @@ const CreateModal = ({ onClose }) => {
   };
 
   const clickInput = () => {
-    refs.current.click();
+    refs.current?.click();
   };
 
-  const saveImgFile = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImgFile(reader.result);
-      setStep(step + 1);
-    };
+  const saveImgFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImgFile(reader.result as string);
+        setStep(step + 1);
+      };
+    }
   };
 
   const toggleEmojiPicker = () => {
     setShowEmojiPicker(!showEmojiPicker);
   };
 
-  const onEmojiClick = (emojiObject) => {
+  const onEmojiClick = (emojiObject: { emoji: string }) => {
     setComment(comment + emojiObject.emoji);
     setShowEmojiPicker(false);
   };
 
-  const onClickImgButton = (filter) => {
+  const onClickImgButton = (filter: string) => {
     if (filter === filterData) {
-      setFilterData();
+      setFilterData(undefined);
     } else {
       setFilterData(filter);
     }
   };
 
-  const renderHeader = (step) => {
+  const renderHeader = (step: number) => {
     switch (step) {
       case 1:
         return (
@@ -132,7 +146,7 @@ const CreateModal = ({ onClose }) => {
     return;
   };
 
-  const renderContent = (step) => {
+  const renderContent = (step: number) => {
     switch (step) {
       case 1:
         return (
@@ -371,7 +385,7 @@ const CreateModal = ({ onClose }) => {
   };
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username");
+    const storedUsername = localStorage.getItem("username") || "";
     setUsername(storedUsername);
     const storedPosts = localStorage.getItem(username);
     if (storedPosts) {

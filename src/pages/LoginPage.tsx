@@ -1,15 +1,15 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import { Colors } from "../styles/ColorStyle";
 import instagram from "../img/instagram.png";
 
-const LoginPage = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const LoginPage: React.FC = () => {
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!username || !password) {
       alert("아이디와 패스워드를 모두 입력해주세요.");
@@ -87,13 +87,13 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  width: ${(props) => props.width || "100%"};
+  width: 100%;
   line-height: 2rem;
   font-size: 14px;
   font-weight: 700;
   color: #fff;
   margin-top: 10px;
-  background-color: ${(props) => props.bgcolor || Colors.buttonBlue};
+  background-color: ${Colors.buttonBlue};
   border: none;
   border-radius: 7px;
   box-shadow: ${Colors.shadow};

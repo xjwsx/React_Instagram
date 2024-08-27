@@ -13,14 +13,33 @@ import { PiPaperPlaneTilt } from "react-icons/pi";
 import { CgSmile } from "react-icons/cg";
 import EmojiPicker from "emoji-picker-react";
 
-const Feed = ({ item }) => {
-  const [likeCount, setLikeCount] = useState(0);
-  const [comments, setComments] = useState([]);
-  const [comment, setComment] = useState("");
-  const [isBookMarkActive, setIsBookMarkActive] = useState(false);
-  const [isLikeActive, setIsLikeActive] = useState(false);
-  const [modal, setModal] = useState(false);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+interface Item {
+  id: string;
+  username?: string;
+  url: string;
+  title?: string;
+  filter?: string;
+}
+
+interface Comment {
+  username: string | null;
+  content: string;
+  timestamp: string;
+  feedid: string;
+}
+
+interface FeedProps {
+  props: Item;
+}
+
+const Feed: React.FC<FeedProps> = ({ props }) => {
+  const [likeCount, setLikeCount] = useState<number>(0);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [comment, setComment] = useState<string>("");
+  const [isBookMarkActive, setIsBookMarkActive] = useState<boolean>(false);
+  const [isLikeActive, setIsLikeActive] = useState<boolean>(false);
+  const [modal, setModal] = useState<boolean>(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
 
   const handleBookMarkButton = () => {
     setIsBookMarkActive(!isBookMarkActive);
@@ -28,7 +47,7 @@ const Feed = ({ item }) => {
 
   const handleLikeCountButton = () => {
     setIsLikeActive(!isLikeActive);
-    if (isLikeActive ? setLikeCount(0) : setLikeCount(1));
+    setLikeCount(isLikeActive ? 0 : 1);
   };
 
   const handleAddComment = () => {
@@ -37,19 +56,19 @@ const Feed = ({ item }) => {
         username: localStorage.getItem("username"),
         content: comment,
         timestamp: new Date().toISOString(),
-        feedid: item.id,
+        feedid: props.id,
       };
       const updateComments = [...comments, newComment];
       setComments(updateComments);
       localStorage.setItem(
-        `${item.username}-${item.id}`,
+        `${props.username}-${props.id}`,
         JSON.stringify(updateComments)
       );
       setComment("");
     }
   };
 
-  const onEmojiClick = (emojiObject) => {
+  const onEmojiClick = (emojiObject: any) => {
     setComment(comment + emojiObject.emoji);
     setShowEmojiPicker(false);
   };
@@ -63,20 +82,22 @@ const Feed = ({ item }) => {
   };
 
   useEffect(() => {
-    const storedComments = localStorage.getItem(`${item.username}-${item.id}`);
+    const storedComments = localStorage.getItem(
+      `${props.username}-${props.id}`
+    );
     if (storedComments) {
       setComments(JSON.parse(storedComments));
     }
-  }, [item.id]);
+  }, [props.id]);
 
   return (
     <FeedLayout>
       <FeedTitle className="FeedTitle">
         <UserInfo className="UserInfo">
           <UserStory className="UserStory">
-            <img src={item.url}></img>
+            <img src={props.url}></img>
           </UserStory>
-          <UserId>{item.username}</UserId>
+          <UserId>{props.username}</UserId>
         </UserInfo>
         <TfiMoreAlt
           style={{
@@ -86,9 +107,9 @@ const Feed = ({ item }) => {
         />
       </FeedTitle>
       <FeedPhoto
-        className={item.filter}
+        className={props.filter}
         style={{
-          backgroundImage: `url(${item.url})`,
+          backgroundImage: `url(${props.url})`,
         }}
       ></FeedPhoto>
       <FeedButtons className="FeedButtons">
@@ -158,7 +179,7 @@ const Feed = ({ item }) => {
           <b>좋아요 {likeCount}개</b>
         </span>
         <span>
-          <b>{item.username}</b> {item.title}
+          <b>{props.username}</b> {props.title}
         </span>
         <div
           style={{
@@ -210,7 +231,7 @@ const Feed = ({ item }) => {
         </div>
       </FeedContents>
 
-      {modal && <ChatModal onClose={changeModal} item={item} />}
+      {modal && <ChatModal onClose={changeModal} item={props} />}
     </FeedLayout>
   );
 };
