@@ -12,7 +12,6 @@ const MainPage = () => {
   const getPhotos = async () => {
     const photoJson = await (
       await fetch(
-        //`https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=5`
         `https://api.thecatapi.com/v1/images/search?limit=10&page=${page}breed_ids=beng&api_key=live_6adQrDjpF5ekrkZQcE1CugaE281U0K6HeVQ8zJiw8ry0u7LT6lTilf2Z9DU9XeTF`
       )
     ).json();
