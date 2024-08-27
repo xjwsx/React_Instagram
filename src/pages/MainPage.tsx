@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Feed from "../components/Feed";
 import Recommand from "../components/Recommand";
 import Story from "../components/Story";
@@ -30,33 +30,41 @@ interface User {
 const MainPage: React.FC = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [page, setPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const loader = useRef<HTMLDivElement | null>(null);
 
-  const getPhotos = async () => {
-    const photoJson = await (
-      await fetch(
-        `https://api.thecatapi.com/v1/images/search?limit=10&page=${page}breed_ids=beng&api_key=live_6adQrDjpF5ekrkZQcE1CugaE281U0K6HeVQ8zJiw8ry0u7LT6lTilf2Z9DU9XeTF`
-      )
-    ).json();
+  const getPhotos = useCallback(async () => {
+    if (page === 1) {
+      setIsLoading(true);
+    }
+    try {
+      const photoJson = await (
+        await fetch(
+          `https://api.thecatapi.com/v1/images/search?limit=5&page=${page}breed_ids=beng&api_key=live_6adQrDjpF5ekrkZQcE1CugaE281U0K6HeVQ8zJiw8ry0u7LT6lTilf2Z9DU9XeTF`
+        )
+      ).json();
 
-    //const newPhotos = photoJson.slice(0, 20);
-    const userJson = await (
-      await fetch(`https://jsonplaceholder.typicode.com/users`)
-    ).json();
+      const userJson = await (
+        await fetch(`https://jsonplaceholder.typicode.com/users`)
+      ).json();
 
-    const result = photoJson.map((photo: Photo, index: number) => {
-      const i = Math.floor(index / 2);
-      // if (index >= 10) {
-      //   i = index / 2;
-      // }
-      return { ...photo, ...userJson[i] };
-    });
+      const result = photoJson.map((photo: Photo, index: number) => {
+        const i = Math.floor(index / 2);
+        return { ...photo, ...userJson[i] };
+      });
 
-    setPhotos((prevPhotos) => [...prevPhotos, ...result]);
-    setPage((prevPage) => prevPage + 1);
-  };
+      setPhotos((prevPhotos) => [...prevPhotos, ...result]);
+      setPage((prevPage) => prevPage + 1);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [page]);
 
   useEffect(() => {
+    if (isLoading) return;
+
     const options = {
       root: null,
       rootMargin: "1800px",
@@ -64,7 +72,7 @@ const MainPage: React.FC = () => {
     };
 
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
+      if (entries[0].isIntersecting && !isLoading) {
         getPhotos();
       }
     }, options);
@@ -78,7 +86,7 @@ const MainPage: React.FC = () => {
         observer.unobserve(loader.current);
       }
     };
-  }, [loader.current]);
+  }, [isLoading, getPhotos]);
 
   useEffect(() => {
     const loadFeedData = () => {
@@ -97,16 +105,22 @@ const MainPage: React.FC = () => {
     <MainPageAll className="MainPageAll">
       <MainPageLayout className="MainPageLayout">
         <FeedMain className="FeedMain">
-          <StoryList className="StoryList">
-            {photos.slice(0, 8).map((data) => {
-              return <Story item={data}></Story>;
-            })}
-          </StoryList>
-          <FeedList className="FeedList">
-            {photos.map((data) => {
-              return <Feed props={data}></Feed>;
-            })}
-          </FeedList>
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <>
+              <StoryList className="StoryList">
+                {photos.slice(0, 8).map((data) => (
+                  <Story key={data.id} item={data} />
+                ))}
+              </StoryList>
+              <FeedList className="FeedList">
+                {photos.map((data) => (
+                  <Feed key={data.id} props={data} />
+                ))}
+              </FeedList>
+            </>
+          )}
           <div ref={loader} />
         </FeedMain>
         <Recommand item={photos} />
