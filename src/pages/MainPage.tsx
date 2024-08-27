@@ -1,13 +1,36 @@
 import styled from "styled-components";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Feed from "../components/Feed";
 import Recommand from "../components/Recommand";
 import Story from "../components/Story";
 
-const MainPage = () => {
-  const [photos, setPhotos] = useState([]);
-  const [page, setPage] = useState(1);
-  const loader = useRef(null);
+interface Photo {
+  id: string;
+  url: string;
+  width: number;
+  height: number;
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  address: {
+    street: string;
+    suite: string;
+    city: string;
+    zipcode: string;
+    geo: {
+      lat: string;
+      lng: string;
+    };
+  };
+}
+
+const MainPage: React.FC = () => {
+  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const loader = useRef<HTMLDivElement | null>(null);
 
   const getPhotos = async () => {
     const photoJson = await (
@@ -21,7 +44,7 @@ const MainPage = () => {
       await fetch(`https://jsonplaceholder.typicode.com/users`)
     ).json();
 
-    const result = photoJson.map((photo, index) => {
+    const result = photoJson.map((photo: Photo, index: number) => {
       const i = Math.floor(index / 2);
       // if (index >= 10) {
       //   i = index / 2;
@@ -81,7 +104,7 @@ const MainPage = () => {
           </StoryList>
           <FeedList className="FeedList">
             {photos.map((data) => {
-              return <Feed item={data}></Feed>;
+              return <Feed props={data}></Feed>;
             })}
           </FeedList>
           <div ref={loader} />

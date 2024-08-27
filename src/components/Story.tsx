@@ -1,6 +1,15 @@
+import React from "react";
 import styled from "styled-components";
 
-const Story = ({ item }) => {
+interface StoryProps {
+  item: {
+    id: string;
+    url: string;
+    username?: string;
+  };
+}
+
+const Story: React.FC<StoryProps> = ({ item }) => {
   return (
     <StoryMain className="StoryMain">
       <StoryLayout className="StoryLayout">

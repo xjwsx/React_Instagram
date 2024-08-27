@@ -1,6 +1,16 @@
 import styled from "styled-components";
 
-const Recommand = ({ item }) => {
+interface Item {
+  id: string;
+  url: string;
+  username?: string;
+}
+
+interface RecommandProps {
+  item: Item[];
+}
+
+const Recommand: React.FC<RecommandProps> = ({ item }) => {
   return (
     <RecommandMain className="RecommandMain">
       <RecommandLayout className="RecommandLayout">

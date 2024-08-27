@@ -1,9 +1,29 @@
+import React from "react";
 import styled from "styled-components";
 import { TfiMoreAlt } from "react-icons/tfi";
 
-const ChatModal = ({ onClose, item }) => {
+interface Item {
+  username?: string;
+  url: string;
+  id: string;
+}
+
+interface CommentData {
+  username: string;
+  content: string;
+  timestamp: string;
+}
+
+interface ChatModalProps {
+  onClose: () => void;
+  item: Item;
+}
+
+const ChatModal: React.FC<ChatModalProps> = ({ onClose, item }) => {
   const storedComments = localStorage.getItem(`${item.username}-${item.id}`);
-  const comments = storedComments ? JSON.parse(storedComments) : [];
+  const comments: CommentData[] = storedComments
+    ? JSON.parse(storedComments)
+    : [];
   return (
     <Outside className="Outside">
       <ModalPosition className="ModalPosition">
